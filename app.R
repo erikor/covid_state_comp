@@ -31,7 +31,9 @@ ui <- fluidPage(
                                               "NY Times Covid-19 Data"),
                      " and ",
                      tags$a(href="https://www2.census.gov/programs-surveys/popest/datasets/2010-2019/", 
-                            "US Census State Populations"))
+                            "US Census State Populations.")),
+            helpText(strong("Note: "), 
+                            "curated data from NY Times may be about 24 hours behind current counts. ")
                      
         ),
 
@@ -106,9 +108,16 @@ comp_st <- function(st1, st2, stat=c("cases", "deaths"), threshold = 0) {
         labs(x=xlab, y=ylab,
              title="Outbreak trajectory comparison",
              subtitle=paste(title, "per million in", st1, "vs.", st2)) +
-        theme(scale_color_manual(values = c("#F8A431", "#0092B9"))) + 
-        theme_ipsum_rc() 
+        my_theme
 }
+
+my_theme <- 
+    theme(scale_color_manual(values = c("#F8A431", "#0092B9"))) + 
+    theme_ipsum_rc() +
+    theme(axis.title.x = element_text(size=12, face=2),
+          axis.title.y = element_text(size=12, face=2),
+          legend.title = element_text(size=14, face=2),
+          legend.text = element_text(size=12))
 
 # Run the application 
 shinyApp(ui = ui, server = server)
