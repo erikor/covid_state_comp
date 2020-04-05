@@ -68,7 +68,10 @@ ui <- fluidPage(
             helpText(strong("Note: "), "curated data last updated by NY Times on ", lastUpdate(nyt), 
                      "and by the COVID Tracking Project on ", lastUpdate(ct)),
 
-        ),
+            helpText(strong("Source Code: "), 
+                     tags$a(href="https://github.com/nytimes/covid-19-data/", 
+                            "available on github."))
+            ),
         mainPanel(
            plotOutput("distPlot"),
            plotOutput("ihmePlot1"),
