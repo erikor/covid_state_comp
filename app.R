@@ -69,7 +69,7 @@ ui <- fluidPage(
                      "and by the COVID Tracking Project on ", lastUpdate(ct)),
 
             helpText(strong("Source Code: "), 
-                     tags$a(href="https://github.com/nytimes/covid-19-data/", 
+                     tags$a(href="https://github.com/erikor/covid_state_comp", 
                             "available on github."))
             ),
         mainPanel(
