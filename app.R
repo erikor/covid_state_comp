@@ -180,7 +180,7 @@ comp_st <- function(st1, st2, new1, new2, stat=c("positive_rate", "death_rate"),
     gd.m$variable = factor(gd.m$variable, labels=c(st1, st2))
     
     colnames(gd.m) <- c("days", "State", "Cases")
-    if(stat == "cases") {
+    if(stat == "positive_rate") {
         ylab <- "Cases / Million population"
         title = "Cases"
         xlab <- "Days since incidence rate > 0"
