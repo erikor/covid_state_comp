@@ -67,7 +67,8 @@ ui <- fluidPage(
                             "US Census State Populations.")),
             helpText(strong("Note: "), "curated data last updated by NY Times on ", lastUpdate(nyt), 
                      "and by the COVID Tracking Project on ", lastUpdate(ct)),
-
+            helpText(strong("IHME Model: "), "Using the IHME model released 4/5/2020"),
+            
             helpText(strong("Source Code: "), 
                      tags$a(href="https://github.com/erikor/covid_state_comp", 
                             "available on github."))

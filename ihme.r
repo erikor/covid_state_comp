@@ -10,8 +10,10 @@ library(scales)
 
 # ihme model
 ihme <- read.csv("Hospitalization_all_locs.csv")
+
 ihme$state <- as.character(ihme$location)
 ihme$state <- gsub("US", "United States", ihme$state)
+ihme$state <- gsub("United States of America", "United States", ihme$state)
 
 # create the plot
 ihmePlot <- function(state, actual) {
@@ -24,7 +26,7 @@ ihmePlot <- function(state, actual) {
                    lower = ihme$deaths_lower[ix.ihme],
                    date = as.character(ihme$date[ix.ihme]))
   colors <- c("95% CI" = "#EFC36E", "Deaths" = "#376095", "Predicted" = "#D76825")
-
+  gd <- gd[which(gd$upper > 0),]
   a <-  ggplot(gd, aes(x = as.Date(date), y = predicted,
                        ymin = lower, 
                        ymax = upper)) +
@@ -35,7 +37,7 @@ ihmePlot <- function(state, actual) {
          title="IHME Model vs. Actual Deaths",
          subtitle=state) +
     scale_x_date(labels = date_format("%b %d"), breaks='7 days') +
-    scale_y_continuous(breaks = seq(0,6000,200), minor_breaks = seq(0,6000, 100)) +
+    scale_y_continuous(breaks = seq(0,10000,400), minor_breaks = seq(0,10000, 200)) +
     theme(panel.grid.major = element_line(color="#ECECEC"),
           panel.grid.minor.y = element_line(color="#DBE6F7", size=0.1),
           panel.grid.minor.x = element_blank()) + 
