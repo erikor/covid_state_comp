@@ -55,6 +55,11 @@ ui <- fluidPage(
                          choices = list("Linear" = "linear", 
                                         "Logarithmic" = "log"),
                          selected = "linear"),
+            radioButtons("model", "IHME Model",
+                         choices = list("April 1" = "1", 
+                                        "April 5" = "2",
+                                        "April 7" = "3"),
+                         selected = "1"),
             helpText(strong("Data Sources: "), 
                      tags$a(href="https://github.com/nytimes/covid-19-data/", 
                                               "NY Times Covid-19 Data,"),
@@ -67,7 +72,7 @@ ui <- fluidPage(
                             "US Census State Populations.")),
             helpText(strong("Note: "), "curated data last updated by NY Times on ", lastUpdate(nyt), 
                      "and by the COVID Tracking Project on ", lastUpdate(ct)),
-            helpText(strong("IHME Model: "), "Using the IHME model released 4/5/2020"),
+            helpText(strong("IHME Model: "), "Using the IHME models released 4/1, 4/5, and 4/7/2020"),
             
             helpText(strong("Source Code: "), 
                      tags$a(href="https://github.com/erikor/covid_state_comp", 
@@ -135,13 +140,13 @@ server <- function(input, output, session) {
         })
         
         output$ihmePlot1 <- renderPlot({
-          ihmePlot(input$state1, dat) +
+          ihmePlot(input$state1, dat, as.numeric(input$model)) +
             my_theme + 
             theme(axis.text.x = element_text(size=9, angle = 45, hjust = 1))
         })
         
         output$ihmePlot2 <- renderPlot({
-          ihmePlot(input$state2, dat) +
+          ihmePlot(input$state2, dat, as.numeric(input$model)) +
             my_theme + 
             theme(axis.text.x = element_text(size=9, angle = 45, hjust = 1))
         })

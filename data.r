@@ -40,7 +40,8 @@ data_CT <- function() {
   
   # remove redundant data
   stdat <- paste(dat$state, dat$date)
-  dat <- dat[-which(duplicated(stdat)),]
+  if(length(which(duplicated(stdat))))
+    dat <- dat[-which(duplicated(stdat)),]
 
   # collate the US totals
   us <- dat %>%
@@ -50,7 +51,8 @@ data_CT <- function() {
               death = sum(death, na.rm = TRUE))
   dat <- rbind(dat, us)
   ix <- which(is.na(dat$state))
-  dat <- dat[-ix,]
+  if(length(ix))
+    dat <- dat[-ix,]
   dat$date <- gsub("([0-9]{4,4})([0-9]{2,2})([0-9]{2,2})", "\\1-\\2-\\3", dat$date)
   
   # calculate rates

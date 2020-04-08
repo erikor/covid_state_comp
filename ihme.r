@@ -9,15 +9,36 @@ library(ggplot2)
 library(scales)
 
 # ihme model
-ihme <- read.csv("Hospitalization_all_locs.csv")
 
-ihme$state <- as.character(ihme$location)
-ihme$state <- gsub("US", "United States", ihme$state)
-ihme$state <- gsub("United States of America", "United States", ihme$state)
+ihme1 <- read.csv("Hospitalization_all_locs_4_1.csv")
+ihme5 <- read.csv("Hospitalization_all_locs_4_5.csv")
+ihme7 <- read.csv("Hospitalization_all_locs_4_7.csv")
+
+ihme1$state <- as.character(ihme1$location)
+ihme1$state <- gsub("US", "United States", ihme1$state)
+ihme1$state <- gsub("United States of America", "United States", ihme1$state)
+
+ihme5$state <- as.character(ihme5$location)
+ihme5$state <- gsub("US", "United States", ihme5$state)
+ihme5$state <- gsub("United States of America", "United States", ihme5$state)
+
+ihme7$state <- as.character(ihme7$location)
+ihme7$state <- gsub("US", "United States", ihme7$state)
+ihme7$state <- gsub("United States of America", "United States", ihme7$state)
+
 
 # create the plot
-ihmePlot <- function(state, actual) {
+ihmePlot <- function(state, actual, revision=1) {
+  if(revision == 1) {
+    ihme <- ihme1
+  } else if(revision == 2) {
+    ihme <- ihme5
+  } else if(revision == 3) {
+    ihme <- ihme7
+  }
   ix.ihme <- which(ihme$state == state)
+  if(length(ix.ihme) == 0)
+    return(ggplot() + theme_void())
   ix.deaths <- which(actual$state == state)
   ix <- match(ihme$date[ix.ihme], actual$date[ix.deaths])
   gd <- data.frame(predicted = ihme$deaths_mean[ix.ihme],
