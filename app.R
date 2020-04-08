@@ -37,7 +37,7 @@ ui <- fluidPage(
     # Sidebar with a slider input for number of bins 
     sidebarLayout(
         sidebarPanel(
-            inlineSelect("state1", "State 1", states, "New York"),
+            inlineSelect("state1", "State 1", states, "United States"),
             inlineTextInput("new1", "Additional", 80, 0, "optional additional data point (e.g. today's total)"),
             div(style="clear: left;"),
             inlineSelect("state2", "State 2", states, "Michigan"),
@@ -59,7 +59,7 @@ ui <- fluidPage(
                          choices = list("April 1" = "1", 
                                         "April 5" = "2",
                                         "April 7" = "3"),
-                         selected = "1"),
+                         selected = "3"),
             helpText(strong("Data Sources: "), 
                      tags$a(href="https://github.com/nytimes/covid-19-data/", 
                                               "NY Times Covid-19 Data,"),
