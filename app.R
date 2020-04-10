@@ -58,8 +58,9 @@ ui <- fluidPage(
             radioButtons("model", "IHME Model",
                          choices = list("April 1" = "1", 
                                         "April 5" = "2",
-                                        "April 7" = "3"),
-                         selected = "3"),
+                                        "April 7" = "3",
+                                        "April 9" = "4"),
+                         selected = "4"),
             helpText(strong("Data Sources: "), 
                      tags$a(href="https://github.com/nytimes/covid-19-data/", 
                                               "NY Times Covid-19 Data,"),
@@ -76,7 +77,8 @@ ui <- fluidPage(
             
             helpText(strong("Source Code: "), 
                      tags$a(href="https://github.com/erikor/covid_state_comp", 
-                            "available on github."))
+                            "available on github.")),
+            width = 4
             ),
         mainPanel(
            plotOutput("distPlot"),

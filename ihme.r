@@ -13,6 +13,7 @@ library(scales)
 ihme1 <- read.csv("Hospitalization_all_locs_4_1.csv")
 ihme5 <- read.csv("Hospitalization_all_locs_4_5.csv")
 ihme7 <- read.csv("Hospitalization_all_locs_4_7.csv")
+ihme9 <- read.csv("Hospitalization_all_locs_4_9.csv")
 
 ihme1$state <- as.character(ihme1$location)
 ihme1$state <- gsub("US", "United States", ihme1$state)
@@ -26,6 +27,10 @@ ihme7$state <- as.character(ihme7$location)
 ihme7$state <- gsub("US", "United States", ihme7$state)
 ihme7$state <- gsub("United States of America", "United States", ihme7$state)
 
+ihme9$state <- as.character(ihme9$location)
+ihme9$state <- gsub("US", "United States", ihme9$state)
+ihme9$state <- gsub("United States of America", "United States", ihme9$state)
+
 
 # create the plot
 ihmePlot <- function(state, actual, revision=1) {
@@ -35,6 +40,8 @@ ihmePlot <- function(state, actual, revision=1) {
     ihme <- ihme5
   } else if(revision == 3) {
     ihme <- ihme7
+  } else if(revision == 4) {
+    ihme <- ihme9
   }
   ix.ihme <- which(ihme$state == state)
   if(length(ix.ihme) == 0)
