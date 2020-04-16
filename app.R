@@ -21,72 +21,59 @@ lastUpdate <- function(dat) {
   last
 }
 
-inlineTextInput <- function(id, label, width, value, tooltip="") {
-    div(style="float: left;", title = tooltip,
-        textInput(inputId=id, label=label, width = width, value = value))
-}
-
-inlineSelect <- function(id, label, choices, selected, width="150px") {
-    div(style="float: left;",
-        selectInput(id, label, choices, selected, width = width))
-}
-
 ui <- fluidPage(
-    # Application title
-    titlePanel("State level COVID trajectories"),
-    # Sidebar with a slider input for number of bins 
-    sidebarLayout(
-        sidebarPanel(
-            inlineSelect("state1", "State 1", states, "United States"),
-            inlineTextInput("new1", "Additional", 80, 0, "optional additional data point (e.g. today's total)"),
-            div(style="clear: left;"),
-            inlineSelect("state2", "State 2", states, "Michigan"),
-            inlineTextInput("new2", "Additional", 80, 0, "optional additional data point (e.g. today's total)"),
-            div(style="clear: left;"),
-            radioButtons("data", "Source Data",
-                         choices = list("NY Times" = "nyt", 
-                                        "COVID Tracking Project" = "ct"),
-                         selected = "ct"),
-            radioButtons("stat", "Statistic",
-                         choices = list("Incidence" = "positive_rate", 
-                                        "Mortality" = "death_rate"),
-                                        selected = "positive_rate"),
-            radioButtons("scale", "Scale",
-                         choices = list("Linear" = "linear", 
-                                        "Logarithmic" = "log"),
-                         selected = "linear"),
-            radioButtons("model", "IHME Model",
-                         choices = list("April 1" = "1", 
-                                        "April 5" = "2",
-                                        "April 7" = "3",
-                                        "April 9" = "4"),
-                         selected = "4"),
-            helpText(strong("Data Sources: "), 
-                     tags$a(href="https://github.com/nytimes/covid-19-data/", 
-                                              "NY Times Covid-19 Data,"),
-                     tags$a(href="https://covidtracking.com/", 
-                            "The COVID Tracking Project,"),
-                     tags$a(href="http://www.healthdata.org/covid/data-downloads", 
-                            "IHME Projections,"),
-                     "and ",
-                     tags$a(href="https://www2.census.gov/programs-surveys/popest/datasets/2010-2019/", 
-                            "US Census State Populations.")),
-            helpText(strong("Note: "), "curated data last updated by NY Times on ", lastUpdate(nyt), 
-                     "and by the COVID Tracking Project on ", lastUpdate(ct)),
-            helpText(strong("IHME Model: "), "Using the IHME models released 4/1, 4/5, and 4/7/2020"),
-            
-            helpText(strong("Source Code: "), 
-                     tags$a(href="https://github.com/erikor/covid_state_comp", 
-                            "available on github.")),
-            width = 4
-            ),
-        mainPanel(
+  titlePanel("State level COVID trajectories"),
+  sidebarLayout(
+    sidebarPanel(
+           selectInput("state1", "State 1", states, "United States"),
+           selectInput("state2", "State 2", states, "Michigan"),
+           radioButtons("data", "Source Data",
+                        choices = list("NY Times" = "nyt", 
+                                       "COVID Tracking Project" = "ct"),
+                        selected = "ct"),
+           radioButtons("stat", "Statistic",
+                        choices = list("Incidence" = "positive_rate", 
+                                       "Mortality" = "death_rate"),
+                        selected = "positive_rate"),
+           radioButtons("scale", "Scale",
+                        choices = list("Linear" = "linear", 
+                                       "Logarithmic" = "log"),
+                        selected = "linear"),
+           radioButtons("model", "IHME Model",
+                        choices = list("April 1" = "1", 
+                                       "April 5" = "2",
+                                       "April 7" = "3",
+                                       "April 9" = "4",
+                                       "April 12" = "5"),
+                        selected = "5"),
+           helpText(strong("Data Sources: "), 
+                    tags$a(href="https://github.com/nytimes/covid-19-data/", 
+                           "NY Times Covid-19 Data,"),
+                    tags$a(href="https://covidtracking.com/", 
+                           "The COVID Tracking Project,"),
+                    tags$a(href="http://www.healthdata.org/covid/data-downloads", 
+                           "IHME Projections,"),
+                    "and ",
+                    tags$a(href="https://www2.census.gov/programs-surveys/popest/datasets/2010-2019/", 
+                           "US Census State Populations.")),
+           helpText(strong("Note: "), "curated data last updated by NY Times on ", lastUpdate(nyt), 
+                    "and by the COVID Tracking Project on ", lastUpdate(ct)),
+           helpText(strong("IHME Model: "), "Using the IHME models released 4/1, 4/5, and 4/7/2020"),
+           
+           helpText(strong("Source Code: "), 
+                    tags$a(href="https://github.com/erikor/covid_state_comp", 
+                           "available on github.")),
+    ),
+    mainPanel(
            plotOutput("distPlot"),
-           plotOutput("ihmePlot1"),
-           plotOutput("ihmePlot2"),
-           width = 6
-        )
+           splitLayout(cellWidths = c("40%", "60%"), 
+                       plotOutput("ihmePlot1"),
+                       plotOutput("ihmePlot2")),
+           splitLayout(cellWidths = c("40%", "60%"), 
+                       plotOutput("ihmePlot3"),
+                       plotOutput("ihmePlot4"))
     )
+  )
 )
 
 curStat <- "positive_rate"
@@ -98,11 +85,9 @@ server <- function(input, output, session) {
     observe({
         val <- 1
         if(input$state1 != curState1) {
-            updateTextInput(session, "new1", value = 0)
             curState1 <<- input$state1 
         } 
         if(input$state2 != curState2) {
-            updateTextInput(session, "new2", value = 0)
             curState2 <<- input$state2
         } 
         
@@ -136,19 +121,31 @@ server <- function(input, output, session) {
         output$distPlot <- renderPlot({
           st1 <- input$state1
           st2 <- input$state2
-          new1 <- input$new1
-          new2 <- input$new2
-          comp_st(st1, st2, new1, new2, input$stat, input$scale)
+          comp_st(st1, st2, 0, 0, input$stat, input$scale)
         })
         
         output$ihmePlot1 <- renderPlot({
           ihmePlot(input$state1, dat, as.numeric(input$model)) +
             my_theme + 
-            theme(axis.text.x = element_text(size=9, angle = 45, hjust = 1))
+            theme(axis.text.x = element_text(size=9, angle = 45, hjust = 1),
+                  legend.position = "none")
         })
         
         output$ihmePlot2 <- renderPlot({
+          ihmeCumulativePlot(input$state1, dat, as.numeric(input$model)) +
+            my_theme + 
+            theme(axis.text.x = element_text(size=9, angle = 45, hjust = 1))
+        })
+        
+        output$ihmePlot3 <- renderPlot({
           ihmePlot(input$state2, dat, as.numeric(input$model)) +
+            my_theme + 
+            theme(axis.text.x = element_text(size=9, angle = 45, hjust = 1),
+          legend.position = "none")
+        })
+        
+        output$ihmePlot4 <- renderPlot({
+          ihmeCumulativePlot(input$state2, dat, as.numeric(input$model)) +
             my_theme + 
             theme(axis.text.x = element_text(size=9, angle = 45, hjust = 1))
         })
