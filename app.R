@@ -44,8 +44,10 @@ ui <- fluidPage(
                                        "April 5" = "2",
                                        "April 7" = "3",
                                        "April 9" = "4",
-                                       "April 12" = "5"),
-                        selected = "5"),
+                                       "April 12" = "5",
+                                       "April 17" = "6",
+                                       "April 22" = "7"),
+                        selected = "7"),
            helpText(strong("Data Sources: "), 
                     tags$a(href="https://github.com/nytimes/covid-19-data/", 
                            "NY Times Covid-19 Data,"),
@@ -58,7 +60,7 @@ ui <- fluidPage(
                            "US Census State Populations.")),
            helpText(strong("Note: "), "curated data last updated by NY Times on ", lastUpdate(nyt), 
                     "and by the COVID Tracking Project on ", lastUpdate(ct)),
-           helpText(strong("IHME Model: "), "Using the IHME models released 4/1, 4/5, and 4/7/2020"),
+           helpText(strong("IHME Model: "), "Using the IHME models released 4/1, 4/5, 4/7, 4/9 and 4/12/2020"),
            
            helpText(strong("Source Code: "), 
                     tags$a(href="https://github.com/erikor/covid_state_comp", 
@@ -227,3 +229,5 @@ my_theme <-
 
 # Run the application 
 shinyApp(ui = ui, server = server)
+
+          

@@ -17,6 +17,8 @@ ihme5 <- read.csv("Hospitalization_all_locs_4_5.csv")
 ihme7 <- read.csv("Hospitalization_all_locs_4_7.csv")
 ihme9 <- read.csv("Hospitalization_all_locs_4_9.csv")
 ihme12 <- read.csv("Hospitalization_all_locs_4_12.csv")
+ihme17 <- read.csv("Hospitalization_all_locs_4_17.csv")
+ihme22 <- read.csv("Hospitalization_all_locs_4_22.csv")
 
 ihme1$state <- as.character(ihme1$location)
 ihme1$state <- gsub("US", "United States", ihme1$state)
@@ -38,22 +40,36 @@ ihme12$state <- as.character(ihme12$location)
 ihme12$state <- gsub("US", "United States", ihme12$state)
 ihme12$state <- gsub("United States of America", "United States", ihme12$state)
 
+ihme17$state <- as.character(ihme17$location)
+ihme17$state <- gsub("US", "United States", ihme17$state)
+ihme17$state <- gsub("United States of America", "United States", ihme17$state)
+
+ihme22$state <- as.character(ihme22$location)
+ihme22$state <- gsub("US", "United States", ihme22$state)
+ihme22$state <- gsub("United States of America", "United States", ihme22$state)
+
 # get range
 uppers <- data.frame(upper = c(ihme1$deaths_upper,
                             ihme5$deaths_upper,
                             ihme7$deaths_upper,
                             ihme9$deaths_upper,
-                            ihme12$deaths_upper),
+                            ihme12$deaths_upper,
+                            ihme17$deaths_upper,
+                            ihme22$deaths_upper),
                    upper_c = c(ihme1$totdea_upper,
                              ihme5$totdea_upper,
                              ihme7$totdea_upper,
                              ihme9$totdea_upper,
-                             ihme12$totdea_upper),
+                             ihme12$totdea_upper,
+                             ihme17$totdea_upper,
+                             ihme22$totdea_upper),
                   state = c(ihme1$state,
                             ihme5$state,
                             ihme7$state,
                             ihme9$state,
-                            ihme12$state))
+                            ihme12$state,
+                            ihme17$state,
+                            ihme22$state))
 
 ranges <- tapply(uppers$upper, INDEX = uppers$state, range)
 ranges_c <- tapply(uppers$upper_c, INDEX = uppers$state, range)
@@ -72,6 +88,10 @@ ihmePlot <- function(state, actual, revision=1) {
     ihme <- ihme9
   } else if(revision == 5) {
     ihme <- ihme12
+  } else if(revision == 6) {
+    ihme <- ihme17
+  } else if(revision == 7) {
+    ihme <- ihme22
   }
   ix.ihme <- which(ihme$state == state)
   if(length(ix.ihme) == 0)
@@ -122,6 +142,10 @@ ihmeCumulativePlot <- function(state, actual, revision=1) {
     ihme <- ihme9
   } else if(revision == 5) {
     ihme <- ihme12
+  } else if(revision == 6) {
+    ihme <- ihme17
+  } else if(revision == 7) {
+    ihme <- ihme22
   }
   ix.ihme <- which(ihme$state == state)
   if(length(ix.ihme) == 0)
