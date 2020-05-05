@@ -33,7 +33,7 @@ data_NYT <- function() {
 
 data_CT <- function() {
   # actual deaths from covidtracking.com
-  dat <- read.csv("https://covidtracking.com/api/v1/states/daily.csv")[ , c(1,2,3,15)]
+  dat <- read.csv("https://covidtracking.com/api/v1/states/daily.csv")[ , c(1,2,3,17)]
   abbr <- readRDS("state_abbr.rds")
   ix <- match(dat$state, abbr$Abbreviation)
   dat$state <- abbr$State[ix]
